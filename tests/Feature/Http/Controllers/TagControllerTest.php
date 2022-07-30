@@ -12,7 +12,7 @@ class TagControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testStore()
+    public function testStoreDataTag()
     {
         $this->post('tags', [
             'name' => 'PHP'
@@ -21,12 +21,16 @@ class TagControllerTest extends TestCase
         $this->assertDatabaseHas('tags', ['name' => 'PHP']);
     }
 
-    public function testDestroy(){
+    public function testDestroyDataTag(){
 
         $tag = Tag::factory()->create();
 
         $this->delete("tags/$tag->id")->assertRedirect('/');
 
         $this->assertDatabaseMissing('tags', ['name' => $tag->name]);
+    }
+
+    public function testValidateNotNullDataTag(){
+        $this->post('tags', ['name' => ''])->assertSessionHasErrors('name');
     }
 }
